@@ -7,7 +7,7 @@ from spack import *
 import os
 
 
-class Qt6Qtbase(CMakePackage):
+class Qt6base(CMakePackage):
     """Qt Base (Core, Gui, Widgets, Network, ...)"""
 
     homepage = "https://www.qt.io"
