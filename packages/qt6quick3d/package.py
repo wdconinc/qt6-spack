@@ -18,6 +18,12 @@ class Qt6quick3d(CMakePackage):
 
     generator = 'Ninja'
 
+    # Changing default to Release for typical use in HPC contexts
+    variant('build_type',
+            default='Release',
+            values=("Release", "Debug", "RelWithDebInfo", "MinSizeRel"),
+            description='CMake build type')
+
     depends_on('cmake@3.16:', type='build')
     depends_on('ninja', type='build')
     depends_on("pkgconfig", type='build')
@@ -25,7 +31,9 @@ class Qt6quick3d(CMakePackage):
 
     versions = ['6.2.3']
     for v in versions:
+        depends_on('qt6base@{}'.format(v), when='@{}'.format(v))
         depends_on('qt6declarative@{}'.format(v), when='@{}'.format(v))
+        depends_on('qt6quicktimeline@{}'.format(v), when='@{}'.format(v))
 
     def patch(self):
         import shutil

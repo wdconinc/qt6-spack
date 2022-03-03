@@ -7,14 +7,16 @@ from spack import *
 import os
 
 
-class Qt6declarative(CMakePackage):
-    """Qt Declarative (Quick 2)."""
+class Qt6shadertools(CMakePackage):
+    """APIs and tools in this module provide the producer functionality for the
+    shader pipeline that allows Qt Quick to operate on Vulkan, Metal, and
+    Direct3D, in addition to OpenGL."""
 
-    url      = "https://github.com/qt/qtdeclarative/archive/refs/tags/v6.2.3.tar.gz"
+    url      = "https://github.com/qt/qtshadertools/archive/refs/tags/v6.2.3.tar.gz"
 
     maintainers = ['wdconinc', 'sethrj']
 
-    version('6.2.3', sha256='eda82abfe685a6ab5664e4268954622ccd05cc9ec8fb16eaa453c54900591baf')
+    version('6.2.3', sha256='658c4acc2925e57d35bbd38cdf49c08297555ed7d632f9e86bfef76e6d861562')
 
     generator = 'Ninja'
 
@@ -32,12 +34,11 @@ class Qt6declarative(CMakePackage):
     versions = ['6.2.3']
     for v in versions:
         depends_on('qt6base@{}'.format(v), when='@{}'.format(v))
-        depends_on('qt6shadertools@{}'.format(v), when='@{}'.format(v))
 
     def patch(self):
         import shutil
         vendor_dir = join_path(self.stage.source_path, 'src/3rdparty')
-        vendor_deps_to_keep = ['masm']
+        vendor_deps_to_keep = ['glslang', 'patches', 'SPIRV-Cross']
         with working_dir(vendor_dir):
             for dep in os.listdir():
                 if os.path.isdir(dep):
