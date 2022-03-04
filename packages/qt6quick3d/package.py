@@ -29,6 +29,8 @@ class Qt6quick3d(CMakePackage):
     depends_on("pkgconfig", type='build')
     depends_on("python", when='@5.7.0:', type='build')
 
+    depends_on('assimp@5.0.1:')
+
     versions = ['6.2.3']
     for v in versions:
         depends_on('qt6base@{}'.format(v), when='@{}'.format(v))
@@ -46,5 +48,11 @@ class Qt6quick3d(CMakePackage):
                         shutil.rmtree(dep)
 
     def cmake_args(self):
-        args = []
+        args = [
+            # Qt components typically install cmake config files in a single prefix 
+            self.define('QT_ADDITIONAL_PACKAGES_PREFIX_PATH',
+                self.spec['qt6declarative'].prefix),
+            self.define('FEATURE_quick3d_assimp', True),
+            self.define('FEATURE_system_assimp', True),
+        ]
         return args
